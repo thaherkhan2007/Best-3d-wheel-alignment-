@@ -5,64 +5,104 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Best 3D Wheel Alignment</title>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
 <style>
-body{background:#1e293b;color:white;font-family:system-ui}
-.card{transition:.3s}
-.card:hover{transform:translateY(-6px)}
-.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;padding:14px 18px;border-radius:40px;font-weight:bold;box-shadow:0 6px 18px #0005}
+body{
+ background:linear-gradient(#000a,#000a),
+ url('https://images.unsplash.com/photo-1601924579440-7a6c64b3b76f') center/cover no-repeat;
+ color:white;
+ font-family:system-ui;
+}
+.card{transition:.3s;cursor:pointer}
+.card:hover{transform:translateY(-6px);background:#2563eb;color:white}
+.adminBtn{position:fixed;top:20px;right:20px}
 </style>
 </head>
 <body>
 
-<header class="bg-white text-black p-6 flex justify-between">
-<h1 class="text-3xl font-bold">Best 3D Wheel Alignment</h1>
-<p>📞 93808 79791</p>
+<button onclick="openAdmin()" class="adminBtn bg-black px-4 py-2 rounded-lg">Admin</button>
+
+<header class="p-6 text-center">
+<h1 class="text-4xl font-bold">Best 3D Wheel Alignment</h1>
+<p class="text-lg mt-2">📞 93808 79791</p>
 </header>
 
 <section class="text-center py-16">
-<h2 class="text-5xl font-bold mb-4">Precision 3D Wheel Alignment</h2>
-<p class="mb-8">Fast • Accurate • Professional</p>
-<button onclick="openBooking()" class="bg-blue-600 px-10 py-4 rounded-xl font-bold text-xl">
-Book Appointment
-</button>
+<h2 class="text-5xl font-bold mb-4">Precision Car Care Services</h2>
+<p>Select a service to book</p>
 </section>
 
 <section class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto p-6">
-<div class="card bg-white text-black p-6 rounded-xl">Wheel Alignment – ₹350</div>
-<div class="card bg-white text-black p-6 rounded-xl">Alignment + Balancing – ₹850+</div>
-<div class="card bg-white text-black p-6 rounded-xl">Water Wash – ₹450+</div>
-<div class="card bg-white text-black p-6 rounded-xl">Full Service – ₹1600</div>
+<div onclick="selectService('Wheel Alignment',350)" class="card bg-white text-black p-6 rounded-xl">Wheel Alignment</div>
+<div onclick="selectService('Alignment + Balancing',850)" class="card bg-white text-black p-6 rounded-xl">Alignment + Balancing</div>
+<div onclick="selectService('Water Wash',450)" class="card bg-white text-black p-6 rounded-xl">Water Wash</div>
+<div onclick="selectService('Full Service',1600)" class="card bg-white text-black p-6 rounded-xl">Full Service</div>
 </section>
 
-<section id="booking" class="hidden bg-white text-black max-w-4xl mx-auto mt-12 p-8 rounded-xl">
-<h3 class="text-3xl font-bold mb-4">Book Appointment</h3>
+<section id="booking" class="hidden bg-white text-black max-w-xl mx-auto mt-12 p-8 rounded-xl">
+<h3 class="text-3xl font-bold mb-2">Book Appointment</h3>
+<p id="serviceInfo" class="font-bold mb-4"></p>
 <input id="name" class="border p-3 w-full mb-3" placeholder="Name">
 <input id="phone" class="border p-3 w-full mb-3" placeholder="Phone">
 <input id="date" type="date" class="border p-3 w-full mb-3">
 <select id="time" class="border p-3 w-full mb-4">
-<option>9:00 AM</option><option>11:00 AM</option><option>1:00 PM</option><option>3:00 PM</option><option>5:00 PM</option>
+<option>9:00 AM</option><option>11:00 AM</option><option>1:00 PM</option>
+<option>3:00 PM</option><option>5:00 PM</option>
 </select>
-<button onclick="saveBooking()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold">
-Confirm Booking
-</button>
+<button onclick="saveBooking()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold w-full">Confirm Booking</button>
 </section>
 
-<a class="whatsapp" onclick="openBooking()">💬 WhatsApp</a>
+<section id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+<div class="bg-white text-black p-8 rounded-xl max-w-lg w-full">
+<h3 class="text-2xl font-bold mb-4">Admin Login</h3>
+<input id="adminId" class="border p-3 w-full mb-3" placeholder="Admin ID">
+<input id="adminPass" type="password" class="border p-3 w-full mb-4" placeholder="Password">
+<button onclick="adminLogin()" class="bg-blue-600 text-white px-6 py-2 rounded w-full">Login</button>
+<div id="dashboard" class="hidden mt-6">
+<h4 class="text-xl font-bold mb-2">Bookings</h4><div id="list"></div>
+<h4 class="text-xl font-bold mt-4 mb-2">Customer History</h4><div id="customers"></div>
+<h4 class="text-xl font-bold mt-4 mb-2">Monthly Revenue</h4><div id="revenue"></div>
+</div>
+</div>
+</section>
 
 <script>
-const ADMIN_HASH="827ccb0eea8a706c4c34a16891f84e7b"
-function openBooking(){booking.classList.remove("hidden")}
+const ADMIN_ID="admin"
+const ADMIN_PASS="Wheel2026"
+const MAX_PER_SLOT=5
+let selectedService="", selectedPrice=0
+const bookingBox=document.getElementById("booking")
+const serviceInfo=document.getElementById("serviceInfo")
+const nameEl=document.getElementById("name")
+const phoneEl=document.getElementById("phone")
+const dateEl=document.getElementById("date")
+const timeEl=document.getElementById("time")
+const adminPanel=document.getElementById("adminPanel")
+const adminId=document.getElementById("adminId")
+const adminPass=document.getElementById("adminPass")
+const dashboard=document.getElementById("dashboard")
+const list=document.getElementById("list")
+const customers=document.getElementById("customers")
+const revenue=document.getElementById("revenue")
+
+function selectService(s,p){selectedService=s;selectedPrice=p;serviceInfo.innerText=`${s} – ₹${p}`;bookingBox.classList.remove("hidden")}
 function getBookings(){return JSON.parse(localStorage.getItem("bookings")||"[]")}
 function saveBooking(){
-let b=getBookings()
-let booking={name:name.value,phone:phone.value,date:date.value,time:time.value}
-b.push(booking)
-localStorage.setItem("bookings",JSON.stringify(b))
-let msg=`Hello! Appointment booked ${booking.name} ${booking.date} ${booking.time}`
-window.open(`https://wa.me/919380879791?text=${encodeURIComponent(msg)}`)
-alert("Booking confirmed!")
-}
+ if(!nameEl.value||!phoneEl.value||!dateEl.value){alert("Fill all details");return}
+ let b=getBookings()
+ let count=b.filter(x=>x.date===dateEl.value&&x.time===timeEl.value).length
+ if(count>=MAX_PER_SLOT){alert("Slot full");return}
+ let booking={name:nameEl.value,phone:phoneEl.value,date:dateEl.value,time:timeEl.value,service:selectedService,price:selectedPrice}
+ b.push(booking);localStorage.setItem("bookings",JSON.stringify(b))
+ saveCustomer(booking);saveRevenue(booking);alert("Booking Confirmed!")}
+function saveCustomer(b){let c=JSON.parse(localStorage.getItem("customers")||"{}");if(!c[b.phone])c[b.phone]=[];c[b.phone].push(b);localStorage.setItem("customers",JSON.stringify(c))}
+function saveRevenue(b){let r=JSON.parse(localStorage.getItem("revenue")||"{}");let m=b.date.slice(0,7);if(!r[m])r[m]=0;r[m]+=b.price;localStorage.setItem("revenue",JSON.stringify(r))}
+function openAdmin(){adminPanel.classList.remove("hidden")}
+function adminLogin(){
+ if(adminId.value!==ADMIN_ID||adminPass.value!==ADMIN_PASS){alert("Wrong login");return}
+ dashboard.classList.remove("hidden");loadBookings();loadCustomers();loadRevenue()}
+function loadBookings(){let b=getBookings();list.innerHTML=b.map(x=>`<div class='border p-2 mb-2'>${x.name} | ${x.service} | ₹${x.price}</div>`).join("")}
+function loadCustomers(){let c=JSON.parse(localStorage.getItem("customers")||"{}");customers.innerHTML=Object.keys(c).map(p=>`<div class='border p-2 mb-2'>${p}<br>${c[p].map(h=>h.service+" "+h.date).join("<br>")}</div>`).join("")}
+function loadRevenue(){let r=JSON.parse(localStorage.getItem("revenue")||"{}");revenue.innerHTML=Object.keys(r).map(m=>`<div class='border p-2 mb-2'>${m} : ₹${r[m]}</div>`).join("")}
 </script>
 
 </body>
