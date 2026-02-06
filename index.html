@@ -2,65 +2,144 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Best 3D Wheel Alignment</title>
 <script src="https://cdn.tailwindcss.com"></script>
+
 <style>
 body{
- background:linear-gradient(#000a,#000a),
- url('https://images.unsplash.com/photo-1601924579440-7a6c64b3b76f') center/cover no-repeat;
+ background:
+ linear-gradient(rgba(0,0,0,.65), rgba(0,0,0,.65)),
+ url("https://images.unsplash.com/photo-1617814076435-1a2b5d4b2f1e") center/cover fixed no-repeat;
  color:white;
  font-family:system-ui;
 }
-.card{transition:.3s;cursor:pointer}
-.card:hover{transform:translateY(-6px);background:#2563eb;color:white}
-.adminBtn{position:fixed;top:20px;right:20px}
+
+.card{
+ transition:.3s;
+ cursor:pointer;
+}
+.card:hover{
+ transform:translateY(-6px);
+ background:#2563eb;
+ color:white;
+}
+
+.adminBtn{
+ position:fixed;
+ top:20px;
+ right:20px;
+ z-index:50;
+}
+
+.dashboard-bg{
+ background:
+ linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)),
+ url('https://images.unsplash.com/photo-1601924579440-7a6c64b3b76f') center/cover no-repeat;
+ color:white;
+ padding:20px;
+ border-radius:16px;
+ animation:fade .6s ease;
+}
+
+.dashboard-bg div{
+ background:white;
+ color:black;
+ border-radius:12px;
+ padding:6px;
+}
+
+@keyframes fade{
+ from{opacity:0;transform:scale(.95)}
+ to{opacity:1;transform:scale(1)}
+}
 </style>
 </head>
+
 <body>
 
-<button onclick="openAdmin()" class="adminBtn bg-black px-4 py-2 rounded-lg">Admin</button>
+<button onclick="openAdmin()" class="adminBtn bg-black px-4 py-2 rounded-lg">
+Admin
+</button>
 
 <header class="p-6 text-center">
 <h1 class="text-4xl font-bold">Best 3D Wheel Alignment</h1>
-<p class="text-lg mt-2">📞 93808 79791</p>
+<p>📞 93808 79791</p>
 </header>
 
-<section class="text-center py-16">
-<h2 class="text-5xl font-bold mb-4">Precision Car Care Services</h2>
-<p>Select a service to book</p>
+<section class="text-center py-14">
+<h2 class="text-5xl font-bold">Select Service</h2>
 </section>
 
 <section class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto p-6">
-<div onclick="selectService('Wheel Alignment',350)" class="card bg-white text-black p-6 rounded-xl">Wheel Alignment</div>
-<div onclick="selectService('Alignment + Balancing',850)" class="card bg-white text-black p-6 rounded-xl">Alignment + Balancing</div>
-<div onclick="selectService('Water Wash',450)" class="card bg-white text-black p-6 rounded-xl">Water Wash</div>
-<div onclick="selectService('Full Service',1600)" class="card bg-white text-black p-6 rounded-xl">Full Service</div>
+
+<div onclick="selectService('Wheel Alignment',350)" class="card bg-white text-black p-6 rounded-xl">
+Wheel Alignment – ₹350
+</div>
+
+<div onclick="selectService('Alignment + Balancing',850)" class="card bg-white text-black p-6 rounded-xl">
+Alignment + Balancing – ₹850
+</div>
+
+<div onclick="selectService('Water Wash',450)" class="card bg-white text-black p-6 rounded-xl">
+Water Wash – ₹450
+</div>
+
+<div onclick="selectService('Full Service',1600)" class="card bg-white text-black p-6 rounded-xl">
+Full Service – ₹1600
+</div>
+
 </section>
 
 <section id="booking" class="hidden bg-white text-black max-w-xl mx-auto mt-12 p-8 rounded-xl">
-<h3 class="text-3xl font-bold mb-2">Book Appointment</h3>
+
+<h3 class="text-3xl font-bold">Book Appointment</h3>
 <p id="serviceInfo" class="font-bold mb-4"></p>
-<input id="name" class="border p-3 w-full mb-3" placeholder="Name">
-<input id="phone" class="border p-3 w-full mb-3" placeholder="Phone">
+
+<input id="name" class="border p-3 w-full mb-3" placeholder="Customer Name">
+<input id="phone" class="border p-3 w-full mb-3" placeholder="Phone Number">
 <input id="date" type="date" class="border p-3 w-full mb-3">
+
 <select id="time" class="border p-3 w-full mb-4">
-<option>9:00 AM</option><option>11:00 AM</option><option>1:00 PM</option>
-<option>3:00 PM</option><option>5:00 PM</option>
+<option>9:00 AM</option>
+<option>11:00 AM</option>
+<option>1:00 PM</option>
+<option>3:00 PM</option>
+<option>5:00 PM</option>
 </select>
-<button onclick="saveBooking()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold w-full">Confirm Booking</button>
+
+<button onclick="saveBooking()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold w-full">
+Confirm Booking
+</button>
+
 </section>
 
+<!-- ADMIN PANEL -->
+
 <section id="adminPanel" class="hidden fixed inset-0 bg-black/70 flex justify-center items-center">
+
 <div class="bg-white text-black p-8 rounded-xl max-w-lg w-full">
+
 <h3 class="text-2xl font-bold mb-4">Admin Login</h3>
+
 <input id="adminId" class="border p-3 w-full mb-3" placeholder="Admin ID">
 <input id="adminPass" type="password" class="border p-3 w-full mb-4" placeholder="Password">
-<button onclick="adminLogin()" class="bg-blue-600 text-white px-6 py-2 rounded w-full">Login</button>
-<div id="dashboard" class="hidden mt-6">
-<h4 class="text-xl font-bold mb-2">Bookings</h4><div id="list"></div>
-<h4 class="text-xl font-bold mt-4 mb-2">Customer History</h4><div id="customers"></div>
-<h4 class="text-xl font-bold mt-4 mb-2">Monthly Revenue</h4><div id="revenue"></div>
+
+<button onclick="adminLogin()" class="bg-blue-600 text-white px-6 py-2 rounded w-full">
+Login
+</button>
+
+<div id="dashboard" class="hidden mt-6 dashboard-bg">
+
+<h4 class="font-bold mb-2">Bookings</h4>
+<div id="list"></div>
+
+<h4 class="font-bold mt-4 mb-2">Customer History</h4>
+<div id="customers"></div>
+
+<h4 class="font-bold mt-4 mb-2">Monthly Revenue</h4>
+<div id="revenue"></div>
+
 </div>
 </div>
 </section>
@@ -68,14 +147,19 @@ body{
 <script>
 const ADMIN_ID="admin"
 const ADMIN_PASS="Wheel2026"
+const WHATSAPP="919380879791"
 const MAX_PER_SLOT=5
-let selectedService="", selectedPrice=0
+
+let selectedService=""
+let selectedPrice=0
+
 const bookingBox=document.getElementById("booking")
 const serviceInfo=document.getElementById("serviceInfo")
 const nameEl=document.getElementById("name")
 const phoneEl=document.getElementById("phone")
 const dateEl=document.getElementById("date")
 const timeEl=document.getElementById("time")
+
 const adminPanel=document.getElementById("adminPanel")
 const adminId=document.getElementById("adminId")
 const adminPass=document.getElementById("adminPass")
@@ -84,25 +168,115 @@ const list=document.getElementById("list")
 const customers=document.getElementById("customers")
 const revenue=document.getElementById("revenue")
 
-function selectService(s,p){selectedService=s;selectedPrice=p;serviceInfo.innerText=`${s} – ₹${p}`;bookingBox.classList.remove("hidden")}
-function getBookings(){return JSON.parse(localStorage.getItem("bookings")||"[]")}
+function selectService(s,p){
+ selectedService=s
+ selectedPrice=p
+ serviceInfo.innerText=`${s} – ₹${p}`
+ bookingBox.classList.remove("hidden")
+ bookingBox.scrollIntoView({behavior:"smooth"})
+}
+
+function getBookings(){
+ return JSON.parse(localStorage.getItem("bookings")||"[]")
+}
+
 function saveBooking(){
- if(!nameEl.value||!phoneEl.value||!dateEl.value){alert("Fill all details");return}
+ if(!nameEl.value||!phoneEl.value||!dateEl.value){
+  alert("Fill all details")
+  return
+ }
+
  let b=getBookings()
  let count=b.filter(x=>x.date===dateEl.value&&x.time===timeEl.value).length
- if(count>=MAX_PER_SLOT){alert("Slot full");return}
- let booking={name:nameEl.value,phone:phoneEl.value,date:dateEl.value,time:timeEl.value,service:selectedService,price:selectedPrice}
- b.push(booking);localStorage.setItem("bookings",JSON.stringify(b))
- saveCustomer(booking);saveRevenue(booking);alert("Booking Confirmed!")}
-function saveCustomer(b){let c=JSON.parse(localStorage.getItem("customers")||"{}");if(!c[b.phone])c[b.phone]=[];c[b.phone].push(b);localStorage.setItem("customers",JSON.stringify(c))}
-function saveRevenue(b){let r=JSON.parse(localStorage.getItem("revenue")||"{}");let m=b.date.slice(0,7);if(!r[m])r[m]=0;r[m]+=b.price;localStorage.setItem("revenue",JSON.stringify(r))}
-function openAdmin(){adminPanel.classList.remove("hidden")}
+ if(count>=MAX_PER_SLOT){
+  alert("Slot full")
+  return
+ }
+
+ let booking={
+  name:nameEl.value,
+  phone:phoneEl.value,
+  date:dateEl.value,
+  time:timeEl.value,
+  service:selectedService,
+  price:selectedPrice
+ }
+
+ b.push(booking)
+ localStorage.setItem("bookings",JSON.stringify(b))
+ saveCustomer(booking)
+ saveRevenue(booking)
+
+ let msg=`Hello Best 3D Wheel Alignment
+
+Name: ${booking.name}
+Phone: ${booking.phone}
+Service: ${booking.service}
+Date: ${booking.date}
+Time: ${booking.time}
+Price: ₹${booking.price}`
+
+ window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`)
+
+ alert("Booking sent to WhatsApp!")
+
+ nameEl.value=""
+ phoneEl.value=""
+ dateEl.value=""
+}
+
+function saveCustomer(b){
+ let c=JSON.parse(localStorage.getItem("customers")||"{}")
+ if(!c[b.phone]) c[b.phone]=[]
+ c[b.phone].push(b)
+ localStorage.setItem("customers",JSON.stringify(c))
+}
+
+function saveRevenue(b){
+ let r=JSON.parse(localStorage.getItem("revenue")||"{}")
+ let m=b.date.slice(0,7)
+ if(!r[m]) r[m]=0
+ r[m]+=b.price
+ localStorage.setItem("revenue",JSON.stringify(r))
+}
+
+function openAdmin(){
+ adminPanel.classList.remove("hidden")
+}
+
 function adminLogin(){
- if(adminId.value!==ADMIN_ID||adminPass.value!==ADMIN_PASS){alert("Wrong login");return}
- dashboard.classList.remove("hidden");loadBookings();loadCustomers();loadRevenue()}
-function loadBookings(){let b=getBookings();list.innerHTML=b.map(x=>`<div class='border p-2 mb-2'>${x.name} | ${x.service} | ₹${x.price}</div>`).join("")}
-function loadCustomers(){let c=JSON.parse(localStorage.getItem("customers")||"{}");customers.innerHTML=Object.keys(c).map(p=>`<div class='border p-2 mb-2'>${p}<br>${c[p].map(h=>h.service+" "+h.date).join("<br>")}</div>`).join("")}
-function loadRevenue(){let r=JSON.parse(localStorage.getItem("revenue")||"{}");revenue.innerHTML=Object.keys(r).map(m=>`<div class='border p-2 mb-2'>${m} : ₹${r[m]}</div>`).join("")}
+ if(adminId.value!==ADMIN_ID||adminPass.value!==ADMIN_PASS){
+  alert("Wrong login")
+  return
+ }
+ dashboard.classList.remove("hidden")
+ loadBookings()
+ loadCustomers()
+ loadRevenue()
+}
+
+function loadBookings(){
+ let b=getBookings()
+ list.innerHTML=b.map(x=>`<div class="mb-2">${x.name} | ${x.service} | ₹${x.price}</div>`).join("")
+}
+
+function loadCustomers(){
+ let c=JSON.parse(localStorage.getItem("customers")||"{}")
+ customers.innerHTML=Object.keys(c).map(p=>`
+ <div class="mb-2">
+ ${p}<br>${c[p].map(h=>h.service+" "+h.date).join("<br>")}
+ </div>
+ `).join("")
+}
+
+function loadRevenue(){
+ let r=JSON.parse(localStorage.getItem("revenue")||"{}")
+ revenue.innerHTML=Object.keys(r).map(m=>`<div>${m} : ₹${r[m]}</div>`).join("")
+}
+
+adminPanel.onclick=e=>{
+ if(e.target===adminPanel) adminPanel.classList.add("hidden")
+}
 </script>
 
 </body>
