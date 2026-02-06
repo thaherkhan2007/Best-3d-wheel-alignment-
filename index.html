@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Best 3D Wheel Alignment</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<style>
+body{background:#1e293b;color:white;font-family:system-ui}
+.card{transition:.3s}
+.card:hover{transform:translateY(-6px)}
+.whatsapp{position:fixed;bottom:20px;right:20px;background:#25D366;padding:14px 18px;border-radius:40px;font-weight:bold;box-shadow:0 6px 18px #0005}
+</style>
+</head>
+<body>
+
+<header class="bg-white text-black p-6 flex justify-between">
+<h1 class="text-3xl font-bold">Best 3D Wheel Alignment</h1>
+<p>📞 93808 79791</p>
+</header>
+
+<section class="text-center py-16">
+<h2 class="text-5xl font-bold mb-4">Precision 3D Wheel Alignment</h2>
+<p class="mb-8">Fast • Accurate • Professional</p>
+<button onclick="openBooking()" class="bg-blue-600 px-10 py-4 rounded-xl font-bold text-xl">
+Book Appointment
+</button>
+</section>
+
+<section class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto p-6">
+<div class="card bg-white text-black p-6 rounded-xl">Wheel Alignment – ₹350</div>
+<div class="card bg-white text-black p-6 rounded-xl">Alignment + Balancing – ₹850+</div>
+<div class="card bg-white text-black p-6 rounded-xl">Water Wash – ₹450+</div>
+<div class="card bg-white text-black p-6 rounded-xl">Full Service – ₹1600</div>
+</section>
+
+<section id="booking" class="hidden bg-white text-black max-w-4xl mx-auto mt-12 p-8 rounded-xl">
+<h3 class="text-3xl font-bold mb-4">Book Appointment</h3>
+<input id="name" class="border p-3 w-full mb-3" placeholder="Name">
+<input id="phone" class="border p-3 w-full mb-3" placeholder="Phone">
+<input id="date" type="date" class="border p-3 w-full mb-3">
+<select id="time" class="border p-3 w-full mb-4">
+<option>9:00 AM</option><option>11:00 AM</option><option>1:00 PM</option><option>3:00 PM</option><option>5:00 PM</option>
+</select>
+<button onclick="saveBooking()" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold">
+Confirm Booking
+</button>
+</section>
+
+<a class="whatsapp" onclick="openBooking()">💬 WhatsApp</a>
+
+<script>
+const ADMIN_HASH="827ccb0eea8a706c4c34a16891f84e7b"
+function openBooking(){booking.classList.remove("hidden")}
+function getBookings(){return JSON.parse(localStorage.getItem("bookings")||"[]")}
+function saveBooking(){
+let b=getBookings()
+let booking={name:name.value,phone:phone.value,date:date.value,time:time.value}
+b.push(booking)
+localStorage.setItem("bookings",JSON.stringify(b))
+let msg=`Hello! Appointment booked ${booking.name} ${booking.date} ${booking.time}`
+window.open(`https://wa.me/919380879791?text=${encodeURIComponent(msg)}`)
+alert("Booking confirmed!")
+}
+</script>
+
+</body>
+</html>
